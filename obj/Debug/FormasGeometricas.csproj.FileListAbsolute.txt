@@ -1,0 +1,7 @@
+C:\Users\E38365\source\repos\ConsoleApp3\FormasGeometricas\bin\Debug\FormasGeometricas.exe.config
+C:\Users\E38365\source\repos\ConsoleApp3\FormasGeometricas\bin\Debug\FormasGeometricas.exe
+C:\Users\E38365\source\repos\ConsoleApp3\FormasGeometricas\bin\Debug\FormasGeometricas.pdb
+C:\Users\E38365\source\repos\ConsoleApp3\FormasGeometricas\obj\Debug\FormasGeometricas.csprojAssemblyReference.cache
+C:\Users\E38365\source\repos\ConsoleApp3\FormasGeometricas\obj\Debug\FormasGeometricas.csproj.CoreCompileInputs.cache
+C:\Users\E38365\source\repos\ConsoleApp3\FormasGeometricas\obj\Debug\FormasGeometricas.exe
+C:\Users\E38365\source\repos\ConsoleApp3\FormasGeometricas\obj\Debug\FormasGeometricas.pdb
