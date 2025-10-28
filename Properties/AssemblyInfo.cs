@@ -5,11 +5,11 @@ using System.Runtime.InteropServices;
 // General Information about an assembly is controlled through the following
 // set of attributes. Change these attribute values to modify the information
 // associated with an assembly.
-[assembly: AssemblyTitle("FormasGeometricas")]
+[assembly: AssemblyTitle("ValidadorCpf")]
 [assembly: AssemblyDescription("")]
 [assembly: AssemblyConfiguration("")]
 [assembly: AssemblyCompany("")]
-[assembly: AssemblyProduct("FormasGeometricas")]
+[assembly: AssemblyProduct("ValidadorCpf")]
 [assembly: AssemblyCopyright("Copyright ©  2025")]
 [assembly: AssemblyTrademark("")]
 [assembly: AssemblyCulture("")]
@@ -20,7 +20,7 @@ using System.Runtime.InteropServices;
 [assembly: ComVisible(false)]
 
 // The following GUID is for the ID of the typelib if this project is exposed to COM
-[assembly: Guid("bd0dd118-30fc-4b1f-853a-07da126a7a78")]
+[assembly: Guid("160a1b88-d260-407f-9b83-6046ccb33982")]
 
 // Version information for an assembly consists of the following four values:
 //

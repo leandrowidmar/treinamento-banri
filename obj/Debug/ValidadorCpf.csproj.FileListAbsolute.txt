@@ -1,0 +1,7 @@
+C:\Users\E38365\source\repos\ConsoleApp3\ValidadorCpf\bin\Debug\ValidadorCpf.exe.config
+C:\Users\E38365\source\repos\ConsoleApp3\ValidadorCpf\bin\Debug\ValidadorCpf.exe
+C:\Users\E38365\source\repos\ConsoleApp3\ValidadorCpf\bin\Debug\ValidadorCpf.pdb
+C:\Users\E38365\source\repos\ConsoleApp3\ValidadorCpf\obj\Debug\ValidadorCpf.csprojAssemblyReference.cache
+C:\Users\E38365\source\repos\ConsoleApp3\ValidadorCpf\obj\Debug\ValidadorCpf.csproj.CoreCompileInputs.cache
+C:\Users\E38365\source\repos\ConsoleApp3\ValidadorCpf\obj\Debug\ValidadorCpf.exe
+C:\Users\E38365\source\repos\ConsoleApp3\ValidadorCpf\obj\Debug\ValidadorCpf.pdb

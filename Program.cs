@@ -1,120 +1,135 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
-namespace FormasGeometricas
+public class App
 {
-    class Program
+    static void Main()
     {
-        public class App
-        {
-            static void Main()
-            {
+        PixPessoaFisica pfPf = new PixPessoaFisica("123.456.789-00", "987.654.321-00", 150.0);
+        Console.WriteLine(pfPf.Executar());
+        pfPf.ImprimirComprovante();
 
+        PixPessoaJuridica pjPj = new PixPessoaJuridica("12.345.678/0001-00", "98.765.432/0001-00", 500.0);
+        Console.WriteLine(pjPj.Executar());
+        pjPj.ImprimirComprovante();
+    }
+}
 
-                Quadrado quadrado1 = new Quadrado(5);  
-                quadrado1.Area();
-                quadrado1.Perimetro();
+public abstract class Pix
+{
+    protected string _idOriginador;
+    protected string _idDestinatario;
+    protected double _valor;
 
-                Retangulo retangulo1 = new Retangulo(5, 10);
-                retangulo1.Area();
-                retangulo1.Perimetro();
+    public abstract string Executar();
 
-                Circulo circulo1 = new Circulo(4);
-                circulo1.Area();
-                circulo1.Perimetro();
+    public void ImprimirComprovante()
+    {
+        Console.WriteLine($"Pix de R$ {_valor:F2} enviado de {_idOriginador} para {_idDestinatario}.");
+    }
+}
 
-            }
-            public interface FormaGeometrica
-            {     
-                void Area();
-                void Perimetro();
-            }
-            public class Quadrado : FormaGeometrica
-            {
-                
-                protected double Lado;
+public class PixPessoaFisica : Pix
+{
+    public PixPessoaFisica(string cpfOriginador, string cpfDestinatario, double valor)
+    {
+        _idOriginador = cpfOriginador;
+        _idDestinatario = cpfDestinatario;
+        _valor = valor;
+    }
 
+    public override string Executar()
+    {
+        if (!ValidadorCPF.IsValid(_idOriginador))
+            return "Originador inválido!";
+        if (!ValidadorCPF.IsValid(_idDestinatario))
+            return "Destinatário inválido!";
+        if (_valor <= 0)
+            return "Valor do pix deve ser positivo!";
 
-                public Quadrado(double lado){
+        return $"Pix de R$ {_valor:F2} enviado de {_idOriginador} para {_idDestinatario}.";
+    }
+}
 
-                    Lado = lado;
+public class PixPessoaJuridica : Pix
+{
+    public PixPessoaJuridica(string cnpjOriginador, string cnpjDestinatario, double valor)
+    {
+        _idOriginador = cnpjOriginador;
+        _idDestinatario = cnpjDestinatario;
+        _valor = valor;
+    }
 
-                }
+    public override string Executar()
+    {
+        if (!ValidadorCNPJ.IsValid(_idOriginador))
+            return "Originador inválido!";
+        if (!ValidadorCNPJ.IsValid(_idDestinatario))
+            return "Destinatário inválido!";
+        if (_valor <= 0)
+            return "Valor do pix deve ser positivo!";
 
-                public void Area(){
-                    
-                    double area = Lado * Lado;
-                    Console.WriteLine("A area do quadrado é = " + area);
+        return $"Pix de R$ {_valor:F2} enviado de {_idOriginador} para {_idDestinatario}.";
+    }
+}
 
-                }
-                public void Perimetro(){    
-                   
-                     double perimetro = Lado * 4;
-                     Console.WriteLine("O perimetro do quadrado é = " + perimetro);                                       
-                }
-            }
-                public class Retangulo : FormaGeometrica
-                {
+public class PixCpfparaJuridica : Pix
+{
+    public PixCpfparaJuridica(string cpfOriginador, string cnpjDestinatario, double valor)
+    {
+        _idOriginador = cpfOriginador;
+        _idDestinatario = cnpjDestinatario;
+        _valor = valor;
+    }
 
-                    protected double Base;
-                    protected double Altura;
+    public override string Executar()
+    {
+        if (!ValidadorCPF.IsValid(_idOriginador))
+            return "Originador inválido!";
+        if (!ValidadorCNPJ.IsValid(_idDestinatario))
+            return "Destinatário inválido!";
+        if (_valor <= 0)
+            return "Valor do pix deve ser positivo!";
 
-                    public Retangulo(double _base, double altura)
-                    {
+        return $"Pix de R$ {_valor:F2} enviado de {_idOriginador} para {_idDestinatario}.";
+    }
+}
 
-                        Base = _base;
-                        Altura = altura;
-                    }
+public class PixJuridicaParaCpf : Pix
+{
+    public PixJuridicaParaCpf(string cpnjOriginador, string cpfDestinatario, double valor)
+    {
+        _idOriginador = cpnjOriginador;
+        _idDestinatario = cpfDestinatario;
+        _valor = valor;
+    }
 
-                    public void Area()
-                    {
+    public override string Executar()
+    {
+        if (!ValidadorCNPJ.IsValid(_idOriginador))
+            return "Originador inválido!";
+        if (!ValidadorCPF.IsValid(_idDestinatario))
+            return "Destinatário inválido!";
+        if (_valor <= 0)
+            return "Valor do pix deve ser positivo!";
 
-                        double area = Base * Altura;
-                        Console.WriteLine("A area do retangulo é = " + area);
+        return $"Pix de R$ {_valor:F2} enviado de {_idOriginador} para {_idDestinatario}.";
+    }
+}
 
-                    }
-                    public void Perimetro()
-                    {
+public class ValidadorCPF
+{
+    public static bool IsValid(string cpf)
+    {
+        // Não é necessário implementar essa validação
+        return true;
+    }
+}
 
-                        double perimetro = 2 * (Base + Altura);
-                        Console.WriteLine("O perimetro do retangulo é = " + perimetro);
-                    }
-
-                }
-
-            public class Circulo : FormaGeometrica
-            {
-
-                protected double Raio;
-
-                public Circulo(double raio)
-                {
-
-                    Raio = raio;
-                }
-
-                public void Area()
-                {
-
-                    double area = Math.PI * (Raio * Raio);
-                    Console.WriteLine("A area do circulo é = " + area);
-
-                }
-                public void Perimetro()
-                {
-
-                    double perimetro = 2 * (Math.PI * Raio);
-                    Console.WriteLine("O perimetro do retangulo é = " + perimetro);
-                }
-            
-             }
-           }
-        }      
-     } 
-    
-  
- 
-
+public class ValidadorCNPJ
+{
+    public static bool IsValid(string cnpj)
+    {
+        // Não é necessário implementar essa validação
+        return true;
+    }
+}
