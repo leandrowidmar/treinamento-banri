@@ -1,135 +1,118 @@
 ﻿using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Runtime.Serialization;
+using System.Text;
+using System.Threading.Tasks;
 
-public class App
+namespace banrisul
 {
-    static void Main()
+    
+    internal class ExercicioEncapsulamento
     {
-        PixPessoaFisica pfPf = new PixPessoaFisica("123.456.789-00", "987.654.321-00", 150.0);
-        Console.WriteLine(pfPf.Executar());
-        pfPf.ImprimirComprovante();
+        static void Main()
+        {
 
-        PixPessoaJuridica pjPj = new PixPessoaJuridica("12.345.678/0001-00", "98.765.432/0001-00", 500.0);
-        Console.WriteLine(pjPj.Executar());
-        pjPj.ImprimirComprovante();
-    }
-}
+            ContaBancaria contaJohn = new ContaBancaria("148.578.595-25", "John Doe");
 
-public abstract class Pix
-{
-    protected string _idOriginador;
-    protected string _idDestinatario;
-    protected double _valor;
+            // 2. TENTANDO ACESSAR OS CAMPOS DIRETAMENTE (Vai dar erro!)
+            // Eu comentei essas linhas, porque elas DEVEM dar erro.
+            // O seu encapsulamento (os 'private') está funcionando!
 
-    public abstract string Executar();
+            // contaJohn.Numero = 25; // Erro! (Correto, pois é 'private')
+            // contaJohn.Titular = "Mary Monroe"; // Erro! (Correto, pois é 'private')
+            // contaJohn.Saldo = 1000000; // Erro! (Correto, pois é 'private')
 
-    public void ImprimirComprovante()
-    {
-        Console.WriteLine($"Pix de R$ {_valor:F2} enviado de {_idOriginador} para {_idDestinatario}.");
-    }
-}
 
-public class PixPessoaFisica : Pix
-{
-    public PixPessoaFisica(string cpfOriginador, string cpfDestinatario, double valor)
-    {
-        _idOriginador = cpfOriginador;
-        _idDestinatario = cpfDestinatario;
-        _valor = valor;
+            // --- CONSERTEI AQUI ---
+            // O Main precisa usar os "Porteiros" (Getters) para LER os dados.
+            Console.WriteLine($"Conta {contaJohn.GetNumeroConta()} em nome de {contaJohn.GetTitular()}: Saldo de {contaJohn.GetSaldo()}.");
+
+            // 3. USANDO OS "COMPORTAMENTOS"
+            contaJohn.Depositar(100);
+
+            Console.WriteLine($"Saque de R$ 30,00 {(contaJohn.Sacar(30) ? "bem sucedido!" : "Não foi concluído.")}"); // Deve ser Bem sucedido.
+            Console.WriteLine($"Saque de R$ 100,00 {(contaJohn.Sacar(100) ? "bem sucedido!" : "Não foi concluído.")}"); // Deve ser Não concluído.
+
+            // 4. VERIFICANDO O SALDO FINAL
+            Console.WriteLine($"Conta {contaJohn.GetNumeroConta()} em nome de {contaJohn.GetTitular()}: Saldo de {contaJohn.GetSaldo()}.");
+        }
     }
 
-    public override string Executar()
+    // --- CONSERTEI AQUI ---
+    // Esta é a "Planta Baixa" da Conta Bancária.
+    // Agora é UMA classe só, com todas as características dentro dela.
+    public class ContaBancaria
     {
-        if (!ValidadorCPF.IsValid(_idOriginador))
-            return "Originador inválido!";
-        if (!ValidadorCPF.IsValid(_idDestinatario))
-            return "Destinatário inválido!";
-        if (_valor <= 0)
-            return "Valor do pix deve ser positivo!";
+        // 1. CARACTERÍSTICAS (Os "Cofres" privados)
+        // (O exercício pedia 'Numero' e 'CPF' como Somente Leitura)
+        private string _numeroConta;
+        private string _cpf;
+        private string _titular;
+        private double _saldo; // 'double' é melhor para dinheiro
 
-        return $"Pix de R$ {_valor:F2} enviado de {_idOriginador} para {_idDestinatario}.";
-    }
-}
 
-public class PixPessoaJuridica : Pix
-{
-    public PixPessoaJuridica(string cnpjOriginador, string cnpjDestinatario, double valor)
-    {
-        _idOriginador = cnpjOriginador;
-        _idDestinatario = cnpjDestinatario;
-        _valor = valor;
-    }
+        // 2. CONSTRUTOR
+        // (É chamado quando você usa 'new ContaBancaria(...)')
+        public ContaBancaria(string cpf, string titular)
+        {
+            _cpf = cpf;
+            _titular = titular;
 
-    public override string Executar()
-    {
-        if (!ValidadorCNPJ.IsValid(_idOriginador))
-            return "Originador inválido!";
-        if (!ValidadorCNPJ.IsValid(_idDestinatario))
-            return "Destinatário inválido!";
-        if (_valor <= 0)
-            return "Valor do pix deve ser positivo!";
+            // --- ADICIONEI ISSO ---
+            _saldo = 0; // Toda conta nova começa com saldo 0
 
-        return $"Pix de R$ {_valor:F2} enviado de {_idOriginador} para {_idDestinatario}.";
-    }
-}
+            // Apenas um número de conta aleatório por enquanto
+            _numeroConta = "12345-6";
+        }
 
-public class PixCpfparaJuridica : Pix
-{
-    public PixCpfparaJuridica(string cpfOriginador, string cnpjDestinatario, double valor)
-    {
-        _idOriginador = cpfOriginador;
-        _idDestinatario = cnpjDestinatario;
-        _valor = valor;
-    }
 
-    public override string Executar()
-    {
-        if (!ValidadorCPF.IsValid(_idOriginador))
-            return "Originador inválido!";
-        if (!ValidadorCNPJ.IsValid(_idDestinatario))
-            return "Destinatário inválido!";
-        if (_valor <= 0)
-            return "Valor do pix deve ser positivo!";
+        // 3. "PORTEIROS" (Getters - Para o Main poder LER os dados)
 
-        return $"Pix de R$ {_valor:F2} enviado de {_idOriginador} para {_idDestinatario}.";
-    }
-}
+        // Você já tinha feito este, estava perfeito!
+        public string GetNumeroConta()
+        {
+            return _numeroConta;
+        }
 
-public class PixJuridicaParaCpf : Pix
-{
-    public PixJuridicaParaCpf(string cpnjOriginador, string cpfDestinatario, double valor)
-    {
-        _idOriginador = cpnjOriginador;
-        _idDestinatario = cpfDestinatario;
-        _valor = valor;
-    }
+        // --- ADICIONEI ISSO ---
+        // Criei os outros getters que o Main precisava para ler
+        public string GetTitular()
+        {
+            return _titular;
+        }
 
-    public override string Executar()
-    {
-        if (!ValidadorCNPJ.IsValid(_idOriginador))
-            return "Originador inválido!";
-        if (!ValidadorCPF.IsValid(_idDestinatario))
-            return "Destinatário inválido!";
-        if (_valor <= 0)
-            return "Valor do pix deve ser positivo!";
+        public double GetSaldo()
+        {
+            return _saldo;
+        }
 
-        return $"Pix de R$ {_valor:F2} enviado de {_idOriginador} para {_idDestinatario}.";
-    }
-}
+        // (Note que NÃO fizemos "Setters" públicos, por isso o Main não pode alterar!)
 
-public class ValidadorCPF
-{
-    public static bool IsValid(string cpf)
-    {
-        // Não é necessário implementar essa validação
-        return true;
-    }
-}
 
-public class ValidadorCNPJ
-{
-    public static bool IsValid(string cnpj)
-    {
-        // Não é necessário implementar essa validação
-        return true;
+        // 4. COMPORTAMENTOS (Os métodos de negócio)
+
+        // --- ADICIONEI ISSO (Vazio) ---
+        // O Main chama 'Depositar', então o método precisa existir.
+        // O exercício pede para não aceitar valores menores que 0.
+        public void Depositar(double valor)
+        {
+            // SUA PRÓXIMA MISSÃO:
+            // 1. Verifique se 'valor' é maior que 0
+            // 2. Se for, adicione o 'valor' ao '_saldo'
+        }
+
+        // --- ADICIONEI ISSO (Vazio) ---
+        // O Main chama 'Sacar', então o método precisa existir.
+        // O exercício pede para não deixar o saldo negativo e retornar 'true' ou 'false'.
+        public bool Sacar(double valor)
+        {
+            // SUA PRÓXIMA MISSÃO:
+            // 1. Verifique se você TEM saldo suficiente (se _saldo >= valor)
+            // 2. Se tiver, subtraia o 'valor' do '_saldo' e retorne 'true'
+            // 3. Se não tiver, não faça nada e retorne 'false'
+
+            return false; // Retorno temporário
+        }
     }
 }
